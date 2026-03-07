@@ -1,0 +1,40 @@
+{
+  "name": "jobless-cc",
+  "version": "0.1.0",
+  "description": "Claude Code framework for job applications — research, resume tailoring, cover letters, form filling, and pipeline tracking",
+  "bin": {
+    "jobless-cc": "./bin/cli.cjs"
+  },
+  "files": [
+    "bin/",
+    "src/",
+    "hooks/dist/",
+    "mcp/server.py",
+    "mcp/client.py",
+    "mcp/requirements.txt",
+    "CHANGELOG.md"
+  ],
+  "keywords": [
+    "claude-code",
+    "claude",
+    "ai",
+    "job-applications",
+    "job-search",
+    "resume",
+    "cover-letter",
+    "career"
+  ],
+  "author": "Jobless",
+  "license": "MIT",
+  "engines": {
+    "node": ">=18"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/bendza/jobless-cc.git"
+  },
+  "homepage": "https://jobless.dev",
+  "bugs": {
+    "url": "https://github.com/bendza/jobless-cc/issues"
+  }
+}
