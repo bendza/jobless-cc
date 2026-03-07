@@ -34,8 +34,25 @@ python3 -m venv ~/.jobless/mcp/.venv
 ```
 
 ### 2. Register MCP server with Claude Code
+
+Write the MCP registration directly into `.mcp.json` in the project root (do NOT use `claude mcp add` — it wraps the command incorrectly):
+
 ```bash
-claude mcp add jobless -- ~/.jobless/mcp/.venv/bin/python3 ~/.jobless/mcp/server.py
+node -e "
+const fs = require('fs');
+const path = '.mcp.json';
+let cfg = {};
+try { cfg = JSON.parse(fs.readFileSync(path, 'utf8')); } catch {}
+if (!cfg.mcpServers) cfg.mcpServers = {};
+const home = require('os').homedir();
+cfg.mcpServers.jobless = {
+  type: 'stdio',
+  command: home + '/.jobless/mcp/.venv/bin/python3',
+  args: [home + '/.jobless/mcp/server.py']
+};
+fs.writeFileSync(path, JSON.stringify(cfg, null, 2) + '\n');
+console.log('Registered jobless MCP in ' + path);
+"
 ```
 
 ### 3. Ask for API key
