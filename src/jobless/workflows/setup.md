@@ -4,57 +4,52 @@ First-run setup: provide resume, extract profile, confirm details, check browser
 
 ---
 
-## Step 0: Jobless MCP Connection (optional)
+## Step 0: MCP Server Setup (MUST DO FIRST)
 
-Check if already connected:
+**IMPORTANT**: This step MUST run before anything else. Do NOT ask for the API key or resume before completing MCP setup.
+
+First, check if MCP is already configured and working:
 ```bash
 node .claude/jobless/bin/jobless-tools.cjs config get jobless_token
 ```
-
-If a token exists: MCP is already connected — skip to Step 1.
-
-If no token, check if the MCP server files were installed:
 ```bash
 ls ~/.jobless/mcp/server.py 2>/dev/null && echo "exists" || echo "missing"
 ```
 
-**If files exist (installed via npx jobless-cc):**
+**If token already exists AND mcp__jobless__ tools are available in this session**: MCP is fully configured — skip to Step 1.
 
-Ask:
-> "Want to connect your Jobless account? It lets me pull your resume directly and sync your applications.
-> Say 'yes' to set it up, or 'skip' to continue without it."
+**If token exists but mcp__jobless__ tools are NOT available**: MCP server needs to be registered. Go to "Register MCP" below.
 
-If yes:
-1. Set up the Python environment:
+**If no token exists**: Ask the user:
+> "Want to connect your Jobless account? It lets me pull your resume directly and sync your applications. Say 'yes' to set it up, or 'skip' to continue without it."
+
+**If user says skip**: Note that MCP is not connected. Set a flag and proceed to Step 1 — the user will provide a resume file manually in Step 2.
+
+**If user says yes — do ALL of these steps IN ORDER:**
+
+### 1. Create Python venv and install deps
 ```bash
 python3 -m venv ~/.jobless/mcp/.venv
 ~/.jobless/mcp/.venv/bin/pip install -q -r ~/.jobless/mcp/requirements.txt
 ```
 
-2. Register with Claude Code:
+### 2. Register MCP server with Claude Code
 ```bash
-claude mcp add jobless --command ~/.jobless/mcp/.venv/bin/python -- ~/.jobless/mcp/server.py
+claude mcp add jobless -- ~/.jobless/mcp/.venv/bin/python3 ~/.jobless/mcp/server.py
 ```
 
-3. Ask for their API key:
-> "Get your API key at **jobless.dev/settings → API Keys**, then paste it here."
+### 3. Ask for API key
+> "Get your API key at **jobless.dev/settings → API Keys → Generate**, then paste it here."
 
-4. Save it:
+### 4. Save the API key
 ```bash
 node .claude/jobless/bin/jobless-tools.cjs config set jobless_token "<key>"
 ```
 
-5. Tell the user:
-> "MCP server registered. **Restart Claude Code now**, then run `/jobless:setup` again to continue."
+### 5. STOP — tell user to restart
+> "MCP server registered and API key saved. **Restart Claude Code now**, then run `/jobless:setup` again to continue setup."
 
-Stop here — the MCP server isn't live until Claude Code restarts.
-
-**If files are missing:**
-
-Offer:
-> "Want to connect your Jobless account? Run `npx jobless-cc --global` first to install the integration, then come back here."
-
-If skip: note that MCP is not connected, proceed to Step 2 using the local path.
+**You MUST stop here.** The MCP server won't be available until Claude Code restarts. Do NOT proceed to Step 1.
 
 ---
 
