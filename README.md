@@ -27,11 +27,7 @@ npx jobless-cc --local
 
 ## Optional: MCP Server
 
-The MCP server gives Claude direct access to the Jobless API (list bookmarks, download resumes, generate cover letters, track applications). It's **not required** — all core workflows work without it.
-
-To set it up, run `/jobless:setup` and choose to configure the MCP server when prompted. It requires:
-- Python 3.10+
-- A Jobless API key from [jobless.dev/settings](https://jobless.dev/settings)
+The standalone MCP server lives in its own repo: [bendza/jobless-mcp](https://github.com/bendza/jobless-mcp). Install with `pip install jobless-mcp` or use the hosted version at `mcp.jobless.dev`. See that repo's README for setup instructions.
 
 ## What Gets Installed
 
