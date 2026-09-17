@@ -1,0 +1,39 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ci-${{ github.workflow }}-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  package-smoke:
+    # This repository is public. Never execute code from an untrusted fork on
+    # a persistent self-hosted machine; pushes and same-repository PRs still
+    # receive the normal smoke check.
+    if: github.event_name != 'pull_request' || github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: [self-hosted, jobless-cc-ci-netcup, X64]
+    timeout-minutes: 5
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: "22"
+
+      - name: Validate package contents
+        run: npm pack --dry-run
+
+      - name: Smoke-test CLI
+        run: |
+          node bin/cli.cjs --version
+          node bin/cli.cjs --help
