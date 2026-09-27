@@ -1,0 +1,13 @@
+# Non-deploy Woodpecker pilot. Run only trusted pushes; this public repository
+# must not execute fork pull-request code on a persistent Docker agent.
+when:
+  - event: push
+    branch: main
+
+steps:
+  - name: package-smoke
+    image: node:22-bookworm-slim
+    commands:
+      - npm pack --dry-run
+      - node bin/cli.cjs --version
+      - node bin/cli.cjs --help
