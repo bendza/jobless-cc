@@ -4,6 +4,11 @@ when:
   - event: push
     branch: main
 
+# Pin to the jobless agent (6 GiB / 2 CPU per step). Without labels any
+# agent can take this workflow, including the 2 GiB sitetest agent.
+labels:
+  product: jobless
+
 steps:
   - name: package-smoke
     image: node:22-bookworm-slim
